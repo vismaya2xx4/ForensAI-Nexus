@@ -1,0 +1,16 @@
+# evidence_triage.py
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+
+# Sample data: file_size, entropy, is_signed (0/1), is_malicious (0/1)
+data = pd.read_csv("sample_evidence.csv")
+X = data[["file_size", "entropy", "is_signed"]]
+y = data["is_malicious"]
+
+model = RandomForestClassifier()
+model.fit(X, y)
+
+def predict_risk(file):
+    return model.predict_proba([file])[0][1]  # Returns malware probability
+
+# Example: predict_risk([1024, 7.2, 0]) → "87% malicious"
